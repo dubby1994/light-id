@@ -30,7 +30,7 @@ public class RedisProvider {
             long value = jedis.incr(key);
             return value << 10 | id;
         } catch (Exception e) {
-            //logger.error("provide, id:{}, key:{}", id, key);
+            logger.error("provide, id:{}, key:{}", id, key);
             return -1;
         }
     }

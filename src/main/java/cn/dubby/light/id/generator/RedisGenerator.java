@@ -39,7 +39,7 @@ public class RedisGenerator extends AbstractGenerator {
     protected long singleGenerate() {
         int index = ThreadLocalRandom.current().nextInt(0, providers.length);
         long id = providers[index].provide();
-        //logger.debug("redis singleGenerate:{}", id);
+        logger.debug("redis singleGenerate:{}", id);
         return id;
     }
 
@@ -49,7 +49,7 @@ public class RedisGenerator extends AbstractGenerator {
         for (int i = 0; i < providers.length; ++i) {
             ids[i] = providers[i].provide();
         }
-        //logger.debug("redis batchGenerate:{}", ids);
+        logger.debug("redis batchGenerate:{}", ids);
         return ids;
     }
 
