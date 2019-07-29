@@ -3,7 +3,7 @@ package cn.dubby.light.id.test;
 import cn.dubby.light.id.config.GeneratorConfig;
 import cn.dubby.light.id.exception.LightInitException;
 import cn.dubby.light.id.factory.ConfigFactory;
-import cn.dubby.light.id.generator.LightGenerator;
+import cn.dubby.light.id.generator.LightIDGenerator;
 import cn.dubby.light.id.generator.RedisGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class RedisGeneratorTest {
     public static void main(String[] args) throws LightInitException, URISyntaxException, InterruptedException {
         ConfigFactory configFactory = new ConfigFactory();
         GeneratorConfig generatorConfig = configFactory.getGeneratorConfig();
-        LightGenerator lightGenerator = new RedisGenerator(generatorConfig);
+        LightIDGenerator lightGenerator = new RedisGenerator(generatorConfig);
 
         int threadNum = 20;
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);

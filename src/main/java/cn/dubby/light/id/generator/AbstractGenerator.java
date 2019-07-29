@@ -13,7 +13,7 @@ import java.util.concurrent.TransferQueue;
  * @author dubby
  * @date 2019/7/29 16:44
  */
-public abstract class AbstractGenerator implements LightGenerator {
+public abstract class AbstractGenerator implements LightIDGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractGenerator.class);
 
