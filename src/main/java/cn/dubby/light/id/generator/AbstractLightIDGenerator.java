@@ -1,5 +1,6 @@
 package cn.dubby.light.id.generator;
 
+import cn.dubby.light.id.exception.LightIDGenerateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,16 +18,16 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractLightIDGenerator.class);
 
-    private TransferQueue<Long> transferQueue = new LinkedTransferQueue<>();
+    protected TransferQueue<Long> transferQueue = new LinkedTransferQueue<>();
 
-    private ScheduledExecutorService generatorThread = Executors.newScheduledThreadPool(1, r -> {
+    private ScheduledExecutorService generatorThread = Executors.newScheduledThreadPool(2, r -> {
         Thread thread = new Thread(r);
         thread.setDaemon(true);
         thread.setName("lightGeneratorThread");
         return thread;
     });
 
-    private int bufferSize;
+    protected int bufferSize;
 
     private int idlePercent;
 
@@ -55,28 +56,22 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
         return bufferSize - transferQueue.size() > bufferSize / idlePercent;
     }
 
-    protected void fillCache() {
-        logger.info("transferQueue.size:{}", transferQueue.size());
-        while (transferQueue.size() < bufferSize) {
-            long[] ids = batchGenerate();
-            for (long id : ids) {
-                if (id > 0) {
-                    transferQueue.offer(id);
-                }
-            }
-        }
-        logger.info("transferQueue.size:{}", transferQueue.size());
+    protected abstract void fillCache();
+
+    private void asyncFillCache() {
+        generatorThread.submit(this::fillCache);
     }
-
-    protected abstract long singleGenerate();
-
-    protected abstract long[] batchGenerate();
 
     @Override
     public long nextID() {
         Long id = transferQueue.poll();
         if (id == null) {
-            return singleGenerate();
+            asyncFillCache();
+            id = transferQueue.poll();
+            if (id == null) {
+                throw new LightIDGenerateException();
+            }
+            return id;
         }
         return id;
     }

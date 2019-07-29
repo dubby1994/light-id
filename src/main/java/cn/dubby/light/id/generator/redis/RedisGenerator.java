@@ -9,7 +9,6 @@ import redis.clients.jedis.JedisPool;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author dubby
@@ -36,21 +35,16 @@ public class RedisGenerator extends AbstractLightIDGenerator {
     }
 
     @Override
-    protected long singleGenerate() {
-        int index = ThreadLocalRandom.current().nextInt(0, providers.length);
-        long id = providers[index].provide();
-        logger.debug("redis singleGenerate:{}", id);
-        return id;
-    }
-
-    @Override
-    protected long[] batchGenerate() {
-        long[] ids = new long[providers.length];
-        for (int i = 0; i < providers.length; ++i) {
-            ids[i] = providers[i].provide();
+    protected void fillCache() {
+        logger.info("transferQueue.size:{}", transferQueue.size());
+        while (transferQueue.size() < bufferSize) {
+            for (RedisProvider provider : providers) {
+                long id = provider.provide();
+                if (id > 0) {
+                    transferQueue.offer(id);
+                }
+            }
         }
-        logger.debug("redis batchGenerate:{}", ids);
-        return ids;
+        logger.info("transferQueue.size:{}", transferQueue.size());
     }
-
 }

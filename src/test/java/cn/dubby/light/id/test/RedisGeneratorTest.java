@@ -32,9 +32,7 @@ public class RedisGeneratorTest {
             executorService.submit(() -> {
                 while (true) {
                     long id = lightGenerator.nextID();
-                    if (id < 0) {
-                        logger.error("error {}", id);
-                    }
+                    logger.info("id:{}", id);
                     Thread.sleep(1);
                 }
             });
