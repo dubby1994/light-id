@@ -14,13 +14,13 @@ public class GeneratorConfig {
 
     private Set<GenProviderConfig> providers;
 
-    private int bufferSize;
+    private int bufferSize = 1000;
 
-    private int timeout;
+    private int timeout = 20;
 
-    private int idlePercent;
+    private int idlePercent = 10;
 
-    private int checkInterval;
+    private int checkInterval = 10;
 
     public int getBufferSize() {
         return bufferSize;
