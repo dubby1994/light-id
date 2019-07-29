@@ -1,0 +1,59 @@
+{
+  "type": "Redis",
+  "providers": [
+    {
+      "id": 1,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_1"
+    },
+    {
+      "id": 2,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_2"
+    },
+    {
+      "id": 3,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_3"
+    },
+    {
+      "id": 4,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_4"
+    },
+    {
+      "id": 5,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_5"
+    },
+    {
+      "id": 6,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_6"
+    },
+    {
+      "id": 7,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_7"
+    },
+    {
+      "id": 8,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_8"
+    },
+    {
+      "id": 9,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_9"
+    },
+    {
+      "id": 10,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_10"
+    }
+  ],
+  "bufferSize": 1000,
+  "timeout": 10,
+  "idlePercent": 10,
+  "checkInterval": 10
+}

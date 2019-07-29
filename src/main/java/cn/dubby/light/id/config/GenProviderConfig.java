@@ -1,5 +1,6 @@
 package cn.dubby.light.id.config;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -13,6 +14,8 @@ public class GenProviderConfig {
     private String url;
 
     private String namespace;
+
+    private Map<String, String> options;
 
     public int getId() {
         return id;
@@ -36,6 +39,14 @@ public class GenProviderConfig {
 
     public void setNamespace(String namespace) {
         this.namespace = namespace;
+    }
+
+    public Map<String, String> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Map<String, String> options) {
+        this.options = options;
     }
 
     @Override
