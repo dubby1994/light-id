@@ -13,9 +13,9 @@ import java.util.concurrent.TransferQueue;
  * @author dubby
  * @date 2019/7/29 16:44
  */
-public abstract class AbstractGenerator implements LightIDGenerator {
+public abstract class AbstractLightIDGenerator implements LightIDGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractLightIDGenerator.class);
 
     private TransferQueue<Long> transferQueue = new LinkedTransferQueue<>();
 
@@ -28,28 +28,34 @@ public abstract class AbstractGenerator implements LightIDGenerator {
 
     private int bufferSize;
 
-    public AbstractGenerator(int bufferSize) {
+    private int idlePercent;
+
+    private int checkInterval;
+
+    public AbstractLightIDGenerator(int bufferSize, int idlePercent, int checkInterval) {
         this.bufferSize = bufferSize;
+        this.idlePercent = idlePercent;
+        this.checkInterval = checkInterval;
     }
 
-    protected void asyncGenerate() {
+    protected void startAsyncGenerate() {
         try {
             generatorThread.scheduleWithFixedDelay(() -> {
                 if (!needGenerate()) {
                     return;
                 }
-                doGenerate();
-            }, 10, 10, TimeUnit.MILLISECONDS);
+                fillCache();
+            }, checkInterval, checkInterval, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             logger.error("asyncGenerate", e);
         }
     }
 
     private boolean needGenerate() {
-        return bufferSize - transferQueue.size() > bufferSize / 10;
+        return bufferSize - transferQueue.size() > bufferSize / idlePercent;
     }
 
-    protected void doGenerate() {
+    protected void fillCache() {
         logger.info("transferQueue.size:{}", transferQueue.size());
         while (transferQueue.size() < bufferSize) {
             long[] ids = batchGenerate();

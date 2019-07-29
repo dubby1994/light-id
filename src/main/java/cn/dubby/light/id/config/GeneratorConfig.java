@@ -18,6 +18,10 @@ public class GeneratorConfig {
 
     private int timeout;
 
+    private int idlePercent;
+
+    private int checkInterval;
+
     public int getBufferSize() {
         return bufferSize;
     }
@@ -48,5 +52,21 @@ public class GeneratorConfig {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public int getIdlePercent() {
+        return idlePercent;
+    }
+
+    public void setIdlePercent(int idlePercent) {
+        this.idlePercent = idlePercent;
+    }
+
+    public int getCheckInterval() {
+        return checkInterval;
+    }
+
+    public void setCheckInterval(int checkInterval) {
+        this.checkInterval = checkInterval;
     }
 }

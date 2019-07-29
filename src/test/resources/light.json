@@ -53,5 +53,7 @@
     }
   ],
   "bufferSize": 1000,
-  "timeout": 10
+  "timeout": 10,
+  "idlePercent": 10,
+  "checkInterval": 10
 }

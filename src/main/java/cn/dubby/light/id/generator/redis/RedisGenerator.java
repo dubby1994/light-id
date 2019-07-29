@@ -1,8 +1,8 @@
-package cn.dubby.light.id.generator;
+package cn.dubby.light.id.generator.redis;
 
 import cn.dubby.light.id.config.GenProviderConfig;
 import cn.dubby.light.id.config.GeneratorConfig;
-import cn.dubby.light.id.generator.provider.RedisProvider;
+import cn.dubby.light.id.generator.AbstractLightIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisPool;
@@ -15,14 +15,14 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author dubby
  * @date 2019/7/29 16:43
  */
-public class RedisGenerator extends AbstractGenerator {
+public class RedisGenerator extends AbstractLightIDGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisGenerator.class);
 
     private RedisProvider[] providers;
 
     public RedisGenerator(GeneratorConfig config) throws URISyntaxException {
-        super(config.getBufferSize());
+        super(config.getBufferSize(), config.getIdlePercent(), config.getCheckInterval());
         providers = new RedisProvider[config.getProviders().size()];
         int index = 0;
         for (GenProviderConfig c : config.getProviders()) {
@@ -31,8 +31,8 @@ public class RedisGenerator extends AbstractGenerator {
             providers[index] = provider;
             ++index;
         }
-        doGenerate();
-        asyncGenerate();
+        fillCache();
+        startAsyncGenerate();
     }
 
     @Override

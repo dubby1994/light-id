@@ -4,7 +4,7 @@ import cn.dubby.light.id.config.GeneratorConfig;
 import cn.dubby.light.id.exception.LightInitException;
 import cn.dubby.light.id.factory.ConfigFactory;
 import cn.dubby.light.id.generator.LightIDGenerator;
-import cn.dubby.light.id.generator.RedisGenerator;
+import cn.dubby.light.id.generator.redis.RedisGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

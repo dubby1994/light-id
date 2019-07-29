@@ -1,4 +1,4 @@
-package cn.dubby.light.id.generator.provider;
+package cn.dubby.light.id.generator.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
