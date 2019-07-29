@@ -1,0 +1,22 @@
+{
+  "type": "Redis",
+  "providers": [
+    {
+      "id": 1,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_key_1"
+    },
+    {
+      "id": 2,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_key_2"
+    },
+    {
+      "id": 3,
+      "url": "redis://127.0.0.1:6379/0",
+      "namespace": "id_key_3"
+    }
+  ],
+  "bufferSize": 1000,
+  "timeout": 10
+}
