@@ -38,8 +38,8 @@
       }
     }
   ],
-  "bufferSize": 1000,
+  "bufferSize": 100,
+  "idleSize": 1,
   "timeout": 50,
-  "idlePercent": 10,
   "checkInterval": 5
 }

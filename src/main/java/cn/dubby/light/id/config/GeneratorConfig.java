@@ -18,7 +18,7 @@ public class GeneratorConfig {
 
     private int timeout = 20;
 
-    private int idlePercent = 10;
+    private int idleSize = 10;
 
     private int checkInterval = 10;
 
@@ -54,12 +54,12 @@ public class GeneratorConfig {
         this.timeout = timeout;
     }
 
-    public int getIdlePercent() {
-        return idlePercent;
+    public int getIdleSize() {
+        return idleSize;
     }
 
-    public void setIdlePercent(int idlePercent) {
-        this.idlePercent = idlePercent;
+    public void setIdleSize(int idleSize) {
+        this.idleSize = idleSize;
     }
 
     public int getCheckInterval() {

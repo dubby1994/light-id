@@ -21,7 +21,7 @@ public class RedisGenerator extends AbstractLightIDGenerator {
     private RedisProvider[] providers;
 
     public RedisGenerator(GeneratorConfig config) throws URISyntaxException {
-        super(config.getBufferSize(), config.getIdlePercent(), config.getCheckInterval());
+        super(config.getBufferSize(), config.getIdleSize(), config.getCheckInterval());
         providers = new RedisProvider[config.getProviders().size()];
         int index = 0;
         for (GenProviderConfig c : config.getProviders()) {

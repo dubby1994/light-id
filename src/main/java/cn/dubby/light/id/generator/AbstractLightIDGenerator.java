@@ -29,13 +29,13 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
 
     protected volatile int bufferSize;
 
-    private int idlePercent;
+    private int idleSize;
 
     private int checkInterval;
 
-    public AbstractLightIDGenerator(int bufferSize, int idlePercent, int checkInterval) {
+    public AbstractLightIDGenerator(int bufferSize, int idleSize, int checkInterval) {
         this.bufferSize = bufferSize;
-        this.idlePercent = idlePercent;
+        this.idleSize = idleSize;
         this.checkInterval = checkInterval;
     }
 
@@ -45,6 +45,7 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
                 if (!needGenerate()) {
                     return;
                 }
+                logger.info("transferQueue.size:{}", transferQueue.size());
                 fillCache();
             }, checkInterval, checkInterval, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
@@ -53,24 +54,18 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
     }
 
     private boolean needGenerate() {
-        return bufferSize - transferQueue.size() > bufferSize / idlePercent;
+        return bufferSize - transferQueue.size() >= idleSize;
     }
 
     protected abstract void fillCache();
 
     @Override
     public long nextID() {
-        Long id = transferQueue.poll();
-        if (id == null) {
-            bufferSize = bufferSize * 2;
-            id = transferQueue.poll();
-            if (id == null) {
-                throw new LightIDGenerateException();
-            }
-            return id;
+        try {
+            return transferQueue.take();
+        } catch (InterruptedException e) {
+            throw new LightIDGenerateException();
         }
-        return id;
     }
-
 
 }

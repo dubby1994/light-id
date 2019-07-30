@@ -7,7 +7,6 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URISyntaxException;
 import java.sql.Connection;
 
 public class MySQLGenerator extends AbstractLightIDGenerator {
@@ -17,7 +16,7 @@ public class MySQLGenerator extends AbstractLightIDGenerator {
     private MySQLProvider[] providers;
 
     public MySQLGenerator(GeneratorConfig config) {
-        super(config.getBufferSize(), config.getIdlePercent(), config.getCheckInterval());
+        super(config.getBufferSize(), config.getIdleSize(), config.getCheckInterval());
         providers = new MySQLProvider[config.getProviders().size()];
         int index = 0;
         for (GenProviderConfig c : config.getProviders()) {
@@ -33,15 +32,14 @@ public class MySQLGenerator extends AbstractLightIDGenerator {
 
     @Override
     protected void fillCache() {
-        logger.info("transferQueue.size:{}", transferQueue.size());
         while (transferQueue.size() < bufferSize) {
             for (MySQLProvider provider : providers) {
                 long id = provider.provide();
                 if (id > 0) {
                     transferQueue.offer(id);
+                    logger.info("transferQueue.size:{}", transferQueue.size());
                 }
             }
         }
-        logger.info("transferQueue.size:{}", transferQueue.size());
     }
 }

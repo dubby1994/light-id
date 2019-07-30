@@ -34,9 +34,11 @@ public class MySQLGeneratorTest {
                 while (true) {
                     try {
                         long id = lightGenerator.nextID();
-                        logger.info("id:{}", id);
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
+                        if (id < 0) {
+                            logger.info("id:{}", id);
+                        }
+                        //Thread.sleep(100);
+                    } catch (Exception e) {
                         logger.error("id", e);
                     }
                 }
