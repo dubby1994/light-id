@@ -39,7 +39,7 @@
     }
   ],
   "bufferSize": 100,
-  "idleSize": 1,
+  "idleSize": 10,
   "timeout": 50,
   "checkInterval": 5
 }

@@ -18,16 +18,16 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractLightIDGenerator.class);
 
-    protected TransferQueue<Long> transferQueue = new LinkedTransferQueue<>();
+    private TransferQueue<Long> transferQueue = new LinkedTransferQueue<>();
 
-    private ScheduledExecutorService generatorThread = Executors.newScheduledThreadPool(2, r -> {
+    private ScheduledExecutorService generatorThread = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread thread = new Thread(r);
         thread.setDaemon(true);
         thread.setName("lightGeneratorThread");
         return thread;
     });
 
-    protected volatile int bufferSize;
+    private int bufferSize;
 
     private int idleSize;
 
