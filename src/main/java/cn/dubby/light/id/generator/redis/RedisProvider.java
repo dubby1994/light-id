@@ -4,7 +4,6 @@ import cn.dubby.light.id.generator.IDProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  * @author dubby
@@ -14,21 +13,21 @@ public class RedisProvider implements IDProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisProvider.class);
 
-    public RedisProvider(int id, JedisPool jedisPool, String key) {
+    public RedisProvider(int id, Jedis jedis, String key) {
         this.id = id;
-        this.jedisPool = jedisPool;
+        this.jedis = jedis;
         this.key = key;
     }
 
     private int id;
 
-    private JedisPool jedisPool;
+    private Jedis jedis;
 
     private String key;
 
     @Override
     public long provide() {
-        try (Jedis jedis = jedisPool.getResource()) {
+        try {
             long value = jedis.incr(key);
             return value << 10 | id;
         } catch (Exception e) {

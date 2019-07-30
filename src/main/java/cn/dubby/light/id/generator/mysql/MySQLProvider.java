@@ -1,39 +1,41 @@
 package cn.dubby.light.id.generator.mysql;
 
+import cn.dubby.light.id.config.GenProviderConfig;
 import cn.dubby.light.id.generator.IDProvider;
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class MySQLProvider implements IDProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(MySQLProvider.class);
 
-    public MySQLProvider(int id, GenericObjectPool<Connection> connPool, String tableName) {
-        this.id = id;
-        this.connPool = connPool;
-        this.sql = "INSERT INTO " + tableName + "(ID) VALUE(NULL);";
+    public MySQLProvider(GenProviderConfig config) throws SQLException {
+        this.config = config;
+        this.id = config.getId();
+        this.sql = "INSERT INTO " + config.getNamespace() + "(ID) VALUE(NULL);";
+        connection = DriverManager.getConnection(config.getUrl(), config.getOptions().get("username"), config.getOptions().get("password"));
     }
 
     private int id;
 
-    private GenericObjectPool<Connection> connPool;
+    private GenProviderConfig config;
+
+    private Connection connection;
 
     private String sql;
 
     @Override
     public long provide() {
-        Connection conn = null;
         Statement statement = null;
         ResultSet rs = null;
         try {
-            conn = connPool.borrowObject();
-            statement = conn.createStatement();
+            statement = connection.createStatement();
             statement.execute(sql, Statement.RETURN_GENERATED_KEYS);
             rs = statement.getGeneratedKeys();
             if (rs.next()) {
@@ -44,12 +46,22 @@ public class MySQLProvider implements IDProvider {
             }
         } catch (Exception e) {
             logger.error("provide, id:{}, sql:{}", id, sql);
-        } finally {
-            if (conn != null) {
-                connPool.returnObject(conn);
+            if (connection == null) {
+                try {
+                    createConn();
+                } catch (SQLException e1) {
+                    logger.error("provide, id:{}, sql:{}", id, sql);
+                    return -1;
+                }
             }
         }
         return -1;
+    }
+
+    private void createConn() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(config.getUrl(), config.getOptions().get("username"), config.getOptions().get("password"));
+        }
     }
 
 }

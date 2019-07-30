@@ -5,11 +5,10 @@ import cn.dubby.light.id.exception.LightInitException;
 import cn.dubby.light.id.factory.ConfigFactory;
 import cn.dubby.light.id.generator.LightIDGenerator;
 import cn.dubby.light.id.generator.mysql.MySQLGenerator;
-import cn.dubby.light.id.generator.redis.RedisGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +21,7 @@ public class MySQLGeneratorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MySQLGeneratorTest.class);
 
-    public static void main(String[] args) throws LightInitException, URISyntaxException, InterruptedException {
+    public static void main(String[] args) throws LightInitException, InterruptedException, SQLException {
         ConfigFactory configFactory = new ConfigFactory();
         GeneratorConfig generatorConfig = configFactory.getGeneratorConfig();
         LightIDGenerator lightGenerator = new MySQLGenerator(generatorConfig);

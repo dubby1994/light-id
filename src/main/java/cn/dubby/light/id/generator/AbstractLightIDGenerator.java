@@ -33,6 +33,8 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
 
     private int checkInterval;
 
+    protected abstract IDProvider[] getIDProvider();
+
     public AbstractLightIDGenerator(int bufferSize, int idleSize, int checkInterval) {
         this.bufferSize = bufferSize;
         this.idleSize = idleSize;
@@ -45,7 +47,6 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
                 if (!needGenerate()) {
                     return;
                 }
-                logger.info("transferQueue.size:{}", transferQueue.size());
                 fillCache();
             }, checkInterval, checkInterval, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
@@ -57,7 +58,17 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
         return bufferSize - transferQueue.size() >= idleSize;
     }
 
-    protected abstract void fillCache();
+    private void fillCache() {
+        while (transferQueue.size() < bufferSize) {
+            for (IDProvider provider : getIDProvider()) {
+                long id = provider.provide();
+                if (id > 0) {
+                    transferQueue.offer(id);
+                    logger.info("transferQueue.size:{}", transferQueue.size());
+                }
+            }
+        }
+    }
 
     @Override
     public long nextID() {
