@@ -3,7 +3,7 @@
   "providers": [
     {
       "id": 1,
-      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
+      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=100",
       "namespace": "id_1",
       "options": {
         "username": "root",
@@ -12,7 +12,7 @@
     },
     {
       "id": 2,
-      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
+      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=100",
       "namespace": "id_2",
       "options": {
         "username": "root",
@@ -21,7 +21,7 @@
     },
     {
       "id": 3,
-      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
+      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=100",
       "namespace": "id_3",
       "options": {
         "username": "root",
@@ -30,7 +30,7 @@
     },
     {
       "id": 4,
-      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
+      "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=100",
       "namespace": "id_4",
       "options": {
         "username": "root",
