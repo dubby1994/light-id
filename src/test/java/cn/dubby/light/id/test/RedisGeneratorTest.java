@@ -8,7 +8,9 @@ import cn.dubby.light.id.generator.redis.RedisGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,8 +23,12 @@ public class RedisGeneratorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisGeneratorTest.class);
 
-    public static void main(String[] args) throws LightInitException, URISyntaxException, InterruptedException {
-        ConfigFactory configFactory = new ConfigFactory();
+    public static void main(String[] args) throws LightInitException, InterruptedException, IOException {
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(ConfigFactory.class.getClassLoader().getResourceAsStream("light_redis.json")));
+        String json = reader.lines().reduce((a, b) -> a + b).orElseThrow(() -> new IllegalStateException("load config error"));
+        reader.close();
+        ConfigFactory configFactory = new ConfigFactory(json);
         GeneratorConfig generatorConfig = configFactory.getGeneratorConfig();
         LightIDGenerator lightGenerator = new RedisGenerator(generatorConfig);
 
@@ -33,7 +39,7 @@ public class RedisGeneratorTest {
                 while (true) {
                     long id = lightGenerator.nextID();
                     logger.info("id:{}", id);
-                    Thread.sleep(1);
+                    //Thread.sleep(1);
                 }
             });
         }
