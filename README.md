@@ -83,16 +83,17 @@
 }
 ```
 
-client本地维护了一个buffer，他会轮训各个数据源（MySQL/Redis）来获得一个自增数字num，举例：`id=1`的redis incr返回`x`，那么最后的到唯一`UNIQUE_ID`计算公式为：
+client本地维护了一个`buffer`，他会轮训各个数据源（MySQL/Redis）来获得一个自增数字num，举例：`id=1`的redis incr返回`x`，那么最后的到唯一`UNIQUE_ID`计算公式为：
 
 ```
 UNIQUE_ID = x << 10 | id
 ```
 
-+ 最多下游最多可以有1024个MySQL/Redis
-+ 最多可以产生2^53个ID，这几乎可以满足任何场景了
++ 最多下游最多可以有`1024`个MySQL/Redis
++ 最多可以产生`2^53`个ID，这几乎可以满足任何场景了
 + 其中如果有个别MySQL/Redis节点挂掉，会自动跳过
-+ 理论上，如果想扩展，下游除了MySQL和Redis，可以支持任何可以提供一个id的服务作为数据源，比如百度的uid-generator。
++ 不会有时钟回拨的问题
++ 理论上，如果想扩展，下游除了MySQL和Redis，可以支持任何可以提供一个id的服务作为数据源，比如百度的`uid-generator`。
 
 # 使用
 
