@@ -27,14 +27,18 @@ public class MySQLGeneratorTest {
         GeneratorConfig generatorConfig = configFactory.getGeneratorConfig();
         LightIDGenerator lightGenerator = new MySQLGenerator(generatorConfig);
 
-        int threadNum = 2;
+        int threadNum = 10;
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
         for (int i = 0; i < threadNum; ++i) {
             executorService.submit(() -> {
                 while (true) {
-                    long id = lightGenerator.nextID();
-                    logger.info("id:{}", id);
-                    Thread.sleep(100);
+                    try {
+                        long id = lightGenerator.nextID();
+                        logger.info("id:{}", id);
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        logger.error("id", e);
+                    }
                 }
             });
         }

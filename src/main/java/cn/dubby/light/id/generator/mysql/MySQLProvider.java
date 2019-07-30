@@ -28,9 +28,11 @@ public class MySQLProvider implements IDProvider {
 
     @Override
     public long provide() {
-        Statement statement;
-        ResultSet rs;
-        try (Connection conn = connPool.borrowObject()) {
+        Connection conn = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            conn = connPool.borrowObject();
             statement = conn.createStatement();
             statement.execute(sql, Statement.RETURN_GENERATED_KEYS);
             rs = statement.getGeneratedKeys();
@@ -42,6 +44,10 @@ public class MySQLProvider implements IDProvider {
             }
         } catch (Exception e) {
             logger.error("provide, id:{}, sql:{}", id, sql);
+        } finally {
+            if (conn != null) {
+                connPool.returnObject(conn);
+            }
         }
         return -1;
     }

@@ -6,7 +6,7 @@
       "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
       "namespace": "id_1",
       "options": {
-        "username": "dubby",
+        "username": "root",
         "password": "123456"
       }
     },
@@ -15,7 +15,7 @@
       "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
       "namespace": "id_2",
       "options": {
-        "username": "dubby",
+        "username": "root",
         "password": "123456"
       }
     },
@@ -24,7 +24,7 @@
       "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
       "namespace": "id_3",
       "options": {
-        "username": "dubby",
+        "username": "root",
         "password": "123456"
       }
     },
@@ -33,13 +33,13 @@
       "url": "jdbc:mysql://localhost:3306/light_id?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
       "namespace": "id_4",
       "options": {
-        "username": "dubby",
+        "username": "root",
         "password": "123456"
       }
     }
   ],
-  "bufferSize": 100,
+  "bufferSize": 1000,
   "timeout": 50,
   "idlePercent": 10,
-  "checkInterval": 10
+  "checkInterval": 5
 }

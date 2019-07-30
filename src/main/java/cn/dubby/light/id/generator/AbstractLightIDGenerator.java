@@ -27,7 +27,7 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
         return thread;
     });
 
-    protected int bufferSize;
+    protected volatile int bufferSize;
 
     private int idlePercent;
 
@@ -58,15 +58,11 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
 
     protected abstract void fillCache();
 
-    private void asyncFillCache() {
-        generatorThread.submit(this::fillCache);
-    }
-
     @Override
     public long nextID() {
         Long id = transferQueue.poll();
         if (id == null) {
-            asyncFillCache();
+            bufferSize = bufferSize * 2;
             id = transferQueue.poll();
             if (id == null) {
                 throw new LightIDGenerateException();

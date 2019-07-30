@@ -16,7 +16,7 @@ public class MySQLGenerator extends AbstractLightIDGenerator {
 
     private MySQLProvider[] providers;
 
-    public MySQLGenerator(GeneratorConfig config) throws URISyntaxException {
+    public MySQLGenerator(GeneratorConfig config) {
         super(config.getBufferSize(), config.getIdlePercent(), config.getCheckInterval());
         providers = new MySQLProvider[config.getProviders().size()];
         int index = 0;
