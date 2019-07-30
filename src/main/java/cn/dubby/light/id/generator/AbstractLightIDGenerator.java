@@ -62,6 +62,7 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
         while (transferQueue.size() < bufferSize) {
             for (IDProvider provider : getIDProvider()) {
                 // TODO: 2019/7/30 理论上每个下游数据源都是独立的，所以这里改成并发请求
+                // TODO: 2019/7/30 对于下游数据源不可用，这里可以添加健康监测，对于故障节点可以跳过
                 long id = provider.provide();
                 if (id > 0) {
                     transferQueue.offer(id);
