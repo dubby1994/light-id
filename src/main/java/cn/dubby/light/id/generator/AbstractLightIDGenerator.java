@@ -61,6 +61,7 @@ public abstract class AbstractLightIDGenerator implements LightIDGenerator {
     private void fillCache() {
         while (transferQueue.size() < bufferSize) {
             for (IDProvider provider : getIDProvider()) {
+                // TODO: 2019/7/30 理论上每个下游数据源都是独立的，所以这里改成并发请求
                 long id = provider.provide();
                 if (id > 0) {
                     transferQueue.offer(id);
