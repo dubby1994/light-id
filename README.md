@@ -84,13 +84,15 @@
 }
 ```
 
+其中，namespace在MySQL中代表表名，表结构只需要有一个id字段，类型是BIGINT，自增主键就可以了；在Redis中代表key名。
+
 client本地维护了一个`buffer`，他会轮训各个数据源（MySQL/Redis）来获得一个自增数字num，举例：`id=1`的redis incr返回`x`，那么最后的到唯一`UNIQUE_ID`计算公式为：
 
 ```
 UNIQUE_ID = x << 10 | id
 ```
 
-+ 最多下游最多可以有`1024`个MySQL/Redis
++ 下游最多可以有`1024`个MySQL/Redis
 + 最多可以产生`2^53`个ID，这几乎可以满足任何场景了
 + 其中如果有个别MySQL/Redis节点挂掉，会自动跳过
 + 不会有时钟回拨的问题
@@ -125,5 +127,11 @@ long id = lightGenerator.nextID();
  ConfigFactory configFactory = new ConfigFactory(json);
 ```
 
+# 建议
 
++ 建议优先使用MySQL作为数据源，可靠性最高
++ 一般使用分布式ID的场景是数据库也是分库分表，如果是8库16表，那可以在8库分别建一个id表，如`id_1`,`id_2`……`id_8`，这样如果id的生成都有压力，那插入实际业务数据肯定压力更大；如果数据库全挂了，那数据也插不进去了；最重要的是，这样几乎没有额外运维成本
++ 建议每个场景维护自己的id数据源，不要共用；资源隔离是最安全，最稳妥的
++ 如果使用Redis，一定要开启持久化，否则一旦重启会导致id重复（即便如此，重启也有可能重复）
++ 如果使用MySQL，在满足业务需求的情况下去，可以考虑开启`innodb_autoinc_lock_mode = 2`
 
