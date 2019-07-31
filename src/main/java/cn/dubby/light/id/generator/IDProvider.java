@@ -1,7 +1,13 @@
 package cn.dubby.light.id.generator;
 
-public interface IDProvider {
+public abstract class IDProvider {
 
-    long provide();
+    protected int id;
+
+    public abstract long increaseByDataSource();
+
+    long provide() {
+        return (increaseByDataSource() << 10) | id;
+    }
 
 }

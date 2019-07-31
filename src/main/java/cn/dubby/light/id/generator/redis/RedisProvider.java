@@ -9,7 +9,7 @@ import redis.clients.jedis.Jedis;
  * @author dubby
  * @date 2019/7/29 17:51
  */
-public class RedisProvider implements IDProvider {
+public class RedisProvider extends IDProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisProvider.class);
 
@@ -26,10 +26,9 @@ public class RedisProvider implements IDProvider {
     private String key;
 
     @Override
-    public long provide() {
+    public long increaseByDataSource() {
         try {
-            long value = jedis.incr(key);
-            return value << 10 | id;
+            return jedis.incr(key);
         } catch (Exception e) {
             logger.error("provide, id:{}, key:{}", id, key);
             return -1;

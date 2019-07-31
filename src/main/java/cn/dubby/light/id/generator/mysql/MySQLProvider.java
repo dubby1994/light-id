@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class MySQLProvider implements IDProvider {
+public class MySQLProvider extends IDProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(MySQLProvider.class);
 
@@ -22,8 +22,6 @@ public class MySQLProvider implements IDProvider {
         connection = DriverManager.getConnection(config.getUrl(), config.getOptions().get("username"), config.getOptions().get("password"));
     }
 
-    private int id;
-
     private GenProviderConfig config;
 
     private Connection connection;
@@ -31,7 +29,7 @@ public class MySQLProvider implements IDProvider {
     private String sql;
 
     @Override
-    public long provide() {
+    public long increaseByDataSource() {
         Statement statement = null;
         ResultSet rs = null;
         try {
@@ -42,7 +40,7 @@ public class MySQLProvider implements IDProvider {
                 long value = rs.getLong(1);
                 rs.close();
                 statement.close();
-                return value << 10 | id;
+                return value;
             }
         } catch (Exception e) {
             logger.error("provide, id:{}, sql:{}", id, sql);
